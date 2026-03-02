@@ -127,7 +127,7 @@ def api_call(server, method, params):
         print(f"  API Error: {resp['error']['message']}", file=sys.stderr)
         sys.exit(1)
 
-    return resp["result"]
+    return resp.get("result")
 
 
 def build_addin_config():
