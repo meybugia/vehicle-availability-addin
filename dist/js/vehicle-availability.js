@@ -132,12 +132,17 @@ geotab.addin.vehicleAvailabilityTracker = () => {
                 });
             }
 
+            var location = (lat && lng && (lat !== 0 || lng !== 0))
+                ? lat.toFixed(5) + ', ' + lng.toFixed(5)
+                : '-';
+
             return {
                 id: device.id,
                 name: device.name || '(unnamed)',
                 serialNumber: device.serialNumber || '',
                 status: inOfficeZone ? 'available' : 'dispatched',
                 statusLabel: inOfficeZone ? 'Available' : 'Dispatched',
+                location: location,
                 lat: lat,
                 lng: lng,
                 speed: speed,
@@ -202,7 +207,7 @@ geotab.addin.vehicleAvailabilityTracker = () => {
         if (!tbody) return;
 
         if (filtered.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="va-empty">No vehicles found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="va-empty">No vehicles found</td></tr>';
             updateSortArrows();
             return;
         }
@@ -212,6 +217,7 @@ geotab.addin.vehicleAvailabilityTracker = () => {
                 '<td>' + escapeHtml(v.name) + '</td>' +
                 '<td>' + escapeHtml(v.serialNumber) + '</td>' +
                 '<td><span class="va-status ' + v.status + '">' + v.statusLabel + '</span></td>' +
+                '<td>' + escapeHtml(v.location) + '</td>' +
                 '<td>' + escapeHtml(v.currentZones) + '</td>' +
                 '<td>' + escapeHtml(v.lastUpdated) + '</td>' +
                 '</tr>';
