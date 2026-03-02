@@ -25,81 +25,7 @@ import urllib.error
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ADDIN_NAME = "Vehicle Availability Tracker"
-ADDIN_VERSION = "1.0.3"
-
-# ── Embedded HTML (flat file references for MyGeotab files property) ──
-
-ADDIN_HTML = """\
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Availability Tracker</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-    <link rel="stylesheet" href="vehicle-availability.css" />
-</head>
-<body>
-    <div id="vehicle-availability-addin">
-        <div class="va-header">
-            <h2>Vehicle Availability</h2>
-            <div class="va-controls">
-                <span id="va-last-updated" class="va-last-updated"></span>
-                <button id="va-refresh-btn" class="va-refresh-btn">Refresh</button>
-            </div>
-        </div>
-        <div id="va-loading" class="va-loading">
-            <div class="va-spinner"></div>
-            Loading vehicle data...
-        </div>
-        <div class="va-summary">
-            <div class="va-card available">
-                <div id="va-count-available" class="va-card-count">-</div>
-                <div class="va-card-label">Available</div>
-            </div>
-            <div class="va-card dispatched">
-                <div id="va-count-dispatched" class="va-card-count">-</div>
-                <div class="va-card-label">Dispatched</div>
-            </div>
-            <div class="va-card total">
-                <div id="va-count-total" class="va-card-count">-</div>
-                <div class="va-card-label">Total Vehicles</div>
-            </div>
-        </div>
-        <div class="va-map-container">
-            <div id="va-map"></div>
-        </div>
-        <div class="va-filter-bar">
-            <label for="va-filter-status">Filter:</label>
-            <select id="va-filter-status" class="va-filter-select">
-                <option value="all">All</option>
-                <option value="available">Available</option>
-                <option value="dispatched">Dispatched</option>
-            </select>
-            <input id="va-search" type="text" class="va-search-input" placeholder="Search by name, serial, zone..." />
-        </div>
-        <div class="va-table-container">
-            <table class="va-table">
-                <thead>
-                    <tr>
-                        <th data-sort="name">Vehicle Name <span class="sort-arrow active">&#9650;</span></th>
-                        <th data-sort="serialNumber">Serial Number <span class="sort-arrow">&#9650;</span></th>
-                        <th data-sort="status">Status <span class="sort-arrow">&#9650;</span></th>
-                        <th data-sort="location">Location <span class="sort-arrow">&#9650;</span></th>
-                        <th data-sort="currentZones">Current Zone <span class="sort-arrow">&#9650;</span></th>
-                        <th data-sort="lastUpdated">Last Updated <span class="sort-arrow">&#9650;</span></th>
-                    </tr>
-                </thead>
-                <tbody id="va-table-body">
-                    <tr><td colspan="6" class="va-empty">Loading...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-    <script src="vehicle-availability.js"></script>
-</body>
-</html>"""
+ADDIN_VERSION = "1.0.4"
 
 
 def load_file(filename):
@@ -131,9 +57,88 @@ def api_call(server, method, params):
 
 
 def build_addin_config():
-    """Build the full add-in config with embedded files."""
+    """Build the full add-in config with a single self-contained HTML file.
+
+    All CSS is inlined in a <style> tag and all JS in a <script> tag.
+    This is the most reliable approach for MyGeotab embedded add-ins
+    deployed via the API (the files property is processed server-side
+    and separate file entries are not reliably served).
+    """
     css = load_file(os.path.join("css", "vehicle-availability.css"))
     js = load_file(os.path.join("js", "vehicle-availability.js"))
+
+    html = (
+        '<!DOCTYPE html>\n'
+        '<html lang="en">\n'
+        '<head>\n'
+        '    <meta charset="UTF-8">\n'
+        '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+        '    <title>Vehicle Availability Tracker</title>\n'
+        '    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />\n'
+        '    <style>\n' + css + '    </style>\n'
+        '</head>\n'
+        '<body>\n'
+        '    <div id="vehicle-availability-addin">\n'
+        '        <div class="va-header">\n'
+        '            <h2>Vehicle Availability</h2>\n'
+        '            <div class="va-controls">\n'
+        '                <span id="va-last-updated" class="va-last-updated"></span>\n'
+        '                <button id="va-refresh-btn" class="va-refresh-btn">Refresh</button>\n'
+        '            </div>\n'
+        '        </div>\n'
+        '        <div id="va-loading" class="va-loading">\n'
+        '            <div class="va-spinner"></div>\n'
+        '            Loading vehicle data...\n'
+        '        </div>\n'
+        '        <div class="va-summary">\n'
+        '            <div class="va-card available">\n'
+        '                <div id="va-count-available" class="va-card-count">-</div>\n'
+        '                <div class="va-card-label">Available</div>\n'
+        '            </div>\n'
+        '            <div class="va-card dispatched">\n'
+        '                <div id="va-count-dispatched" class="va-card-count">-</div>\n'
+        '                <div class="va-card-label">Dispatched</div>\n'
+        '            </div>\n'
+        '            <div class="va-card total">\n'
+        '                <div id="va-count-total" class="va-card-count">-</div>\n'
+        '                <div class="va-card-label">Total Vehicles</div>\n'
+        '            </div>\n'
+        '        </div>\n'
+        '        <div class="va-map-container">\n'
+        '            <div id="va-map"></div>\n'
+        '        </div>\n'
+        '        <div class="va-filter-bar">\n'
+        '            <label for="va-filter-status">Filter:</label>\n'
+        '            <select id="va-filter-status" class="va-filter-select">\n'
+        '                <option value="all">All</option>\n'
+        '                <option value="available">Available</option>\n'
+        '                <option value="dispatched">Dispatched</option>\n'
+        '            </select>\n'
+        '            <input id="va-search" type="text" class="va-search-input" placeholder="Search by name, serial, zone..." />\n'
+        '        </div>\n'
+        '        <div class="va-table-container">\n'
+        '            <table class="va-table">\n'
+        '                <thead>\n'
+        '                    <tr>\n'
+        '                        <th data-sort="name">Vehicle Name <span class="sort-arrow active">&#9650;</span></th>\n'
+        '                        <th data-sort="serialNumber">Serial Number <span class="sort-arrow">&#9650;</span></th>\n'
+        '                        <th data-sort="status">Status <span class="sort-arrow">&#9650;</span></th>\n'
+        '                        <th data-sort="location">Location <span class="sort-arrow">&#9650;</span></th>\n'
+        '                        <th data-sort="currentZones">Current Zone <span class="sort-arrow">&#9650;</span></th>\n'
+        '                        <th data-sort="lastUpdated">Last Updated <span class="sort-arrow">&#9650;</span></th>\n'
+        '                    </tr>\n'
+        '                </thead>\n'
+        '                <tbody id="va-table-body">\n'
+        '                    <tr><td colspan="6" class="va-empty">Loading...</td></tr>\n'
+        '                </tbody>\n'
+        '            </table>\n'
+        '        </div>\n'
+        '    </div>\n'
+        '    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>\n'
+        '    <script>\n' + js + '    </script>\n'
+        '</body>\n'
+        '</html>'
+    )
 
     return {
         "name": ADDIN_NAME,
@@ -148,9 +153,7 @@ def build_addin_config():
             }
         ],
         "files": {
-            "vehicle-availability.html": ADDIN_HTML,
-            "vehicle-availability.js": js,
-            "vehicle-availability.css": css,
+            "vehicle-availability.html": html,
         },
     }
 
