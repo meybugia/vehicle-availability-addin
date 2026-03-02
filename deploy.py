@@ -57,12 +57,12 @@ def api_call(server, method, params):
 
 
 def build_addin_config():
-    """Build the full add-in config with a single self-contained HTML file.
+    """Build the full add-in config with separate file entries.
 
-    All CSS is inlined in a <style> tag and all JS in a <script> tag.
-    This is the most reliable approach for MyGeotab embedded add-ins
-    deployed via the API (the files property is processed server-side
-    and separate file entries are not reliably served).
+    MyGeotab strips inline <style> and <script> tags from embedded HTML,
+    so CSS and JS must be provided as separate entries in the files object
+    with flat keys (no subdirectory prefixes). The HTML references them
+    via <link> and <script src> tags.
     """
     css = load_file(os.path.join("css", "vehicle-availability.css"))
     js = load_file(os.path.join("js", "vehicle-availability.js"))
@@ -75,7 +75,7 @@ def build_addin_config():
         '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
         '    <title>Vehicle Availability Tracker</title>\n'
         '    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />\n'
-        '    <style>\n' + css + '    </style>\n'
+        '    <link rel="stylesheet" href="vehicle-availability.css" />\n'
         '</head>\n'
         '<body>\n'
         '    <div id="vehicle-availability-addin">\n'
@@ -135,7 +135,7 @@ def build_addin_config():
         '        </div>\n'
         '    </div>\n'
         '    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>\n'
-        '    <script>\n' + js + '    </script>\n'
+        '    <script src="vehicle-availability.js"></script>\n'
         '</body>\n'
         '</html>'
     )
@@ -154,6 +154,8 @@ def build_addin_config():
         ],
         "files": {
             "vehicle-availability.html": html,
+            "vehicle-availability.css": css,
+            "vehicle-availability.js": js,
         },
     }
 
