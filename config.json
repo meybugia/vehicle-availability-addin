@@ -1,15 +1,15 @@
 {
   "name": "Vehicle Availability Tracker",
   "supportEmail": "support@example.com",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "items": [
     {
-      "url": "https://localhost:8443/vehicle-availability.html",
+      "url": "https://vehicle-availability-addin-15b327.geotabpages.com/vehicle-availability.html",
       "path": "ActivityLink/",
       "menuName": {
         "en": "Vehicle Availability"
       },
-      "icon": "https://localhost:8443/images/icon.svg"
+      "icon": "https://vehicle-availability-addin-15b327.geotabpages.com/images/icon.svg"
     }
   ]
 }
