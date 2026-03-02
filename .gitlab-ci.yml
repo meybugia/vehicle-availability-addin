@@ -2,6 +2,8 @@ image: alpine:latest
 
 pages:
   stage: deploy
+  tags:
+    - prod-docker-autoscaler-runner
   script:
     - mkdir -p public
     - cp dist/*.html public/
