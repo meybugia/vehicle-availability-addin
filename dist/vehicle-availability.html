@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Availability Tracker</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
+
+    <!-- Add-in CSS -->
+    <link rel="stylesheet" href="css/vehicle-availability.css" />
+</head>
+<body>
+    <div id="vehicle-availability-addin">
+
+        <!-- Header -->
+        <div class="va-header">
+            <h2>Vehicle Availability</h2>
+            <div class="va-controls">
+                <span id="va-last-updated" class="va-last-updated"></span>
+                <button id="va-refresh-btn" class="va-refresh-btn">Refresh</button>
+            </div>
+        </div>
+
+        <!-- Loading indicator -->
+        <div id="va-loading" class="va-loading">
+            <div class="va-spinner"></div>
+            Loading vehicle data...
+        </div>
+
+        <!-- Summary cards -->
+        <div class="va-summary">
+            <div class="va-card available">
+                <div id="va-count-available" class="va-card-count">-</div>
+                <div class="va-card-label">Available</div>
+            </div>
+            <div class="va-card dispatched">
+                <div id="va-count-dispatched" class="va-card-count">-</div>
+                <div class="va-card-label">Dispatched</div>
+            </div>
+            <div class="va-card total">
+                <div id="va-count-total" class="va-card-count">-</div>
+                <div class="va-card-label">Total Vehicles</div>
+            </div>
+        </div>
+
+        <!-- Map -->
+        <div class="va-map-container">
+            <div id="va-map"></div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="va-filter-bar">
+            <label for="va-filter-status">Filter:</label>
+            <select id="va-filter-status" class="va-filter-select">
+                <option value="all">All</option>
+                <option value="available">Available</option>
+                <option value="dispatched">Dispatched</option>
+            </select>
+            <input id="va-search" type="text" class="va-search-input" placeholder="Search by name, serial, zone..." />
+        </div>
+
+        <!-- Vehicle table -->
+        <div class="va-table-container">
+            <table class="va-table">
+                <thead>
+                    <tr>
+                        <th data-sort="name">Vehicle Name <span class="sort-arrow active">&#9650;</span></th>
+                        <th data-sort="serialNumber">Serial Number <span class="sort-arrow">&#9650;</span></th>
+                        <th data-sort="status">Status <span class="sort-arrow">&#9650;</span></th>
+                        <th data-sort="currentZones">Current Zone <span class="sort-arrow">&#9650;</span></th>
+                        <th data-sort="lastUpdated">Last Updated <span class="sort-arrow">&#9650;</span></th>
+                    </tr>
+                </thead>
+                <tbody id="va-table-body">
+                    <tr><td colspan="5" class="va-empty">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <!-- Add-in JS -->
+    <script src="js/vehicle-availability.js"></script>
+</body>
+</html>

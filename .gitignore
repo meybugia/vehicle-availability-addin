@@ -1,0 +1,3 @@
+config-embedded.json
+dist/cert.pem
+dist/key.pem
