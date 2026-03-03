@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Availability Tracker</title>
 
-    <!-- Leaflet CSS (bundled locally to avoid CSP / CDN issues) -->
-    <link rel="stylesheet" href="css/leaflet.css" />
+    <!-- Leaflet CSS: CDN with local fallback -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"
+          onerror="this.onerror=null; this.href='css/leaflet.css';" />
 
     <!-- Add-in CSS -->
     <link rel="stylesheet" href="css/vehicle-availability.css" />
@@ -81,8 +82,13 @@
         </div>
     </div>
 
-    <!-- Leaflet JS (bundled locally to avoid CSP / CDN issues) -->
-    <script src="js/leaflet.js"></script>
+    <!-- Leaflet JS: CDN with local fallback -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        if (typeof L === "undefined") {
+            document.write('<script src="js/leaflet.js"><\/script>');
+        }
+    </script>
 
     <!-- Add-in JS -->
     <script src="js/vehicle-availability.js"></script>

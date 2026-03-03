@@ -4,12 +4,36 @@ Vehicle Availability Tracker - Deploy Script
 
 Deploys (or removes) the add-in to a client's MyGeotab database.
 
+There are three ways to deploy this add-in:
+
+  1. URL mode (requires public GitLab Pages):
+     Use the MyGeotab CLI to point the database at the hosted config.json:
+       addin deploy --url https://vehicle-availability-addin-15b327.geotabpages.com/config.json
+
+     Prerequisites:
+       - GitLab Pages must be set to public access:
+         curl -X PUT -H "PRIVATE-TOKEN: $PAT" -H "Content-Type: application/json" \\
+           -d '{"pages_access_level": "public"}' \\
+           "https://git.geotab.com/api/v4/projects/13482"
+
+  2. Embedded mode (this script -- works everywhere):
+     Bundles all assets (HTML, CSS, JS, Leaflet) directly into the database's
+     SystemSettings, so no external network access is needed at runtime.
+       python deploy.py -d DATABASE -u USERNAME
+
+  3. Manual JSON mode:
+     Copy the contents of config-deploy.json into MyGeotab's SystemSettings
+     via Administration > System... > System Settings > Add-Ins.
+
 Usage:
-    Deploy:
-        python deploy.py --server my.geotab.com --database CLIENT_DB --username admin@example.com --password SECRET
+    Deploy (embedded):
+        python deploy.py -d CLIENT_DB -u admin@example.com
+
+    Deploy to a specific server:
+        python deploy.py --server my.geotab.com -d CLIENT_DB -u admin@example.com -p SECRET
 
     Remove:
-        python deploy.py --server my.geotab.com --database CLIENT_DB --username admin@example.com --password SECRET --remove
+        python deploy.py --remove -d CLIENT_DB -u admin@example.com
 
     Dry run (show config without deploying):
         python deploy.py --dry-run
@@ -25,7 +49,7 @@ import urllib.error
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ADDIN_NAME = "Vehicle Availability Tracker"
-ADDIN_VERSION = "1.0.5"
+ADDIN_VERSION = "1.1.0"
 
 
 def load_file(filename):

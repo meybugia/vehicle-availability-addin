@@ -6,6 +6,7 @@ pages:
     - prod-docker-autoscaler-runner
   script:
     - mkdir -p public
+    - cp config.json public/
     - cp dist/*.html public/
     - cp -r dist/js public/js
     - cp -r dist/css public/css
