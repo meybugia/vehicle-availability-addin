@@ -43,8 +43,9 @@ geotab.addin.vehicleAvailabilityTracker = () => {
         });
     }
 
-    const ICON_AVAILABLE = createIcon('#4CAF50');
-    const ICON_DISPATCHED = createIcon('#FF9800');
+    // Defer icon creation until initialize() when Leaflet is guaranteed loaded
+    let ICON_AVAILABLE = null;
+    let ICON_DISPATCHED = null;
 
     // ── Point-in-polygon ───────────────────────────────────────
 
@@ -328,6 +329,19 @@ geotab.addin.vehicleAvailabilityTracker = () => {
     return {
         initialize: function (freshApi, state, callback) {
             api = freshApi;
+
+            // Guard: if Leaflet failed to load, show error and continue without map
+            if (typeof L === 'undefined') {
+                console.error('Vehicle Availability - Leaflet library failed to load');
+                var mapEl = document.getElementById('va-map');
+                if (mapEl) mapEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#999;">Map unavailable (library failed to load)</div>';
+                callback();
+                return;
+            }
+
+            // Create marker icons now that Leaflet is loaded
+            ICON_AVAILABLE = createIcon('#4CAF50');
+            ICON_DISPATCHED = createIcon('#FF9800');
 
             // Initialize Leaflet map
             map = L.map('va-map').setView([43.65, -79.38], 10);

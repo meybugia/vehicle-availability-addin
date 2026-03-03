@@ -25,7 +25,7 @@ import urllib.error
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ADDIN_NAME = "Vehicle Availability Tracker"
-ADDIN_VERSION = "1.0.4"
+ADDIN_VERSION = "1.0.5"
 
 
 def load_file(filename):
@@ -66,6 +66,8 @@ def build_addin_config():
     """
     css = load_file(os.path.join("css", "vehicle-availability.css"))
     js = load_file(os.path.join("js", "vehicle-availability.js"))
+    leaflet_css = load_file(os.path.join("css", "leaflet.css"))
+    leaflet_js = load_file(os.path.join("js", "leaflet.js"))
 
     html = (
         '<!DOCTYPE html>\n'
@@ -74,7 +76,7 @@ def build_addin_config():
         '    <meta charset="UTF-8">\n'
         '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
         '    <title>Vehicle Availability Tracker</title>\n'
-        '    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />\n'
+        '    <link rel="stylesheet" href="leaflet.css" />\n'
         '    <link rel="stylesheet" href="vehicle-availability.css" />\n'
         '</head>\n'
         '<body>\n'
@@ -134,7 +136,7 @@ def build_addin_config():
         '            </table>\n'
         '        </div>\n'
         '    </div>\n'
-        '    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>\n'
+        '    <script src="leaflet.js"></script>\n'
         '    <script src="vehicle-availability.js"></script>\n'
         '</body>\n'
         '</html>'
@@ -149,13 +151,15 @@ def build_addin_config():
                 "url": "vehicle-availability.html",
                 "path": "ActivityLink/",
                 "menuName": {"en": "Vehicle Availability"},
-                "icon": "https://unpkg.com/heroicons@2.0.18/24/outline/truck.svg",
+                "icon": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12'/%3E%3C/svg%3E",
             }
         ],
         "files": {
             "vehicle-availability.html": html,
             "vehicle-availability.css": css,
             "vehicle-availability.js": js,
+            "leaflet.css": leaflet_css,
+            "leaflet.js": leaflet_js,
         },
     }
 
