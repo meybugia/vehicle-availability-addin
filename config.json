@@ -4,12 +4,12 @@
   "version": "1.1.0",
   "items": [
     {
-      "url": "https://vehicle-availability-addin-15b327.geotabpages.com/vehicle-availability.html",
+      "url": "https://meybugia.github.io/vehicle-availability-addin/vehicle-availability.html",
       "path": "ActivityLink/",
       "menuName": {
         "en": "Vehicle Availability"
       },
-      "icon": "https://vehicle-availability-addin-15b327.geotabpages.com/images/icon.svg"
+      "icon": "https://meybugia.github.io/vehicle-availability-addin/images/icon.svg"
     }
   ]
 }
